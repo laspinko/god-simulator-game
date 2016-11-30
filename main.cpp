@@ -1,8 +1,12 @@
 #include<SDL2/SDL.h>
 #include<iostream>
 #include"perlin_noise.h"
+#include"game_map.h"
 
-perlin_noise pn(123);
+// GLOBAL
+
+int sh = 1, sw = 2;
+game_map m(512,512, sh, sw);
 
 // WINDOW RELATED
 
@@ -25,17 +29,7 @@ void close_window() {
     SDL_Quit();
 }
 void draw() {
-    for(int x = 0; x < width; x ++) {
-        for(int y = 0; y < height; y ++) {
-            double n = pn.interpolate(pn.octave(x / 256.0, y / 256.0, 6));
-            int r = (int)(n * 255.0), g = r, b = r;
-
-            SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-
-            SDL_RenderDrawPoint(renderer, x, y);
-
-        }
-    }
+    m.draw(renderer);
     SDL_RenderPresent(renderer);
 }
 
@@ -46,14 +40,15 @@ int main(int args, char **argv) {
     bool quit = false;
 
     init_window();
-
-        draw();
     while(!quit) {
         while(SDL_PollEvent(&e) != 0) {
             if(e.type == SDL_QUIT) {
                 quit = true;
             }
         }
+        m = game_map(512,512, sw,sh);
+        sw ++;
+        sh ++;
         draw();
         SDL_Delay(10);
     }

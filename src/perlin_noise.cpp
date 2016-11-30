@@ -47,18 +47,18 @@ double perlin_noise::noise(double x, double y) {
 
     double value = lerp(xa,xb,wy);
 
-    return (value + 1) / 2;
+    return  value;
 }
 
 double perlin_noise::octave(double x, double y, int o) {
-    double ampl = 1.0, freq = 1.0;
+    double ampl = 1, freq = 1;
     double ans = 0;
     for(int i = 0; i < o; i ++) {
         ans += noise( x * freq, y * freq) * ampl;
         freq *= 2.0;
         ampl /= 2.0;
     }
-    return ans / (2.0 - ampl);
+    return (ans + 2) / 4;
 }
 
 inline double perlin_noise::interpolate(double a) {
